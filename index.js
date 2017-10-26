@@ -29,37 +29,31 @@ var defaults = {
 	 * Layout templates
 	 * @type {(String|Array)}
 	 */
-	layouts: ['src/views/layouts/*'],
+	layouts: ['src/styleGuide/views/layouts/*'],
 
 	/**
 	 * Layout includes (partials)
 	 * @type {String}
 	 */
-	layoutIncludes: ['src/views/layouts/includes/*'],
+	layoutIncludes: ['src/styleGuide/views/layouts/includes/*'],
 
 	/**
 	 * Pages to be inserted into a layout
 	 * @type {(String|Array)}
 	 */
-	views: ['src/views/**/*', '!src/views/+(layouts)/**'],
+	views: ['src/styleGuide/views/**/*', '!src/styleGuide/views/+(layouts)/**'],
 
 	/**
 	 * Materials - snippets turned into partials
 	 * @type {(String|Array)}
 	 */
-	materials: ['src/materials/**/*'],
+	materials: ['src/components/**/*.html'],
 
 	/**
 	 * JSON or YAML data models that are piped into views
 	 * @type {(String|Array)}
 	 */
 	data: ['src/data/**/*.{json,yml}'],
-
-	/**
-	 * Data to be merged into context
-	 * @type {(Object)}
-	 */
-	buildData: {},
 
 	/**
 	 * Markdown files containing toolkit-wide documentation
@@ -82,18 +76,6 @@ var defaults = {
 	 * @type {String}
 	 */
 	dest: 'dist',
-
-	/**
-	 * Extension to output files as
-	 * @type {String}
-	 */
-  extension: '.html',
-
-	/**
-	 * Custom dest map
-	 * @type {Object}
-	 */
-  destMap: {},
 
 	/**
 	 * beautifier options
@@ -251,7 +233,7 @@ var buildContext = function (data, hash) {
 	var docs = {};
 	docs[options.keys.docs] = assembly.docs;
 
-	return _.assign({}, data, assembly.data, assembly.materialData, options.buildData, materials, views, docs, hash);
+	return _.assign({}, data, assembly.data, assembly.materialData, materials, views, docs, hash);
 
 };
 
@@ -289,7 +271,6 @@ var parseMaterials = function () {
 
 	// get files and dirs
 	var files = globby.sync(options.materials, { nodir: true, nosort: true });
-
 	// build a glob for identifying directories
 	options.materials = (typeof options.materials === 'string') ? [options.materials] : options.materials;
 	var dirsGlob = options.materials.map(function (pattern) {
@@ -651,23 +632,12 @@ var assemble = function () {
 			filePath = path.normalize(pageMatter.data.dest);
 		}
 
-    if (options.destMap[collection]) {
-			filePath = path.normalize(path.join(options.destMap[collection], path.basename(file)));
-    }
-
 		// change extension to .html
-		filePath = filePath.replace(/\.[0-9a-z]+$/, options.extension);
+		filePath = filePath.replace(/\.[0-9a-z]+$/, '.html');
 
 		// write file
 		mkdirp.sync(path.dirname(filePath));
-		try {
-			fs.writeFileSync(filePath, template(context));
-		} catch(e) {
-			const originFilePath = path.dirname(file) + '/' + path.basename(file);
-
-			console.error('\x1b[31m \x1b[1mBold', 'Error while comiling template', originFilePath, '\x1b[0m \n')
-			throw e;
-		}
+		fs.writeFileSync(filePath, template(context));
 
 		// write a copy file if custom dest-copy front-matter variable is defined
 		if (pageMatter.data['dest-copy']) {
