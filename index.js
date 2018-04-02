@@ -41,7 +41,7 @@ var defaults = {
 	 * Pages to be inserted into a layout
 	 * @type {(String|Array)}
 	 */
-	views: ['src/styleGuide/views/**/*', '!src/styleGuide/views/+(layouts)/**'],
+	views: ['src/pages/*/*','src/styleGuide/views/**/*', '!src/styleGuide/views/+(layouts)/**'],
 
 	/**
 	 * Materials - snippets turned into partials
