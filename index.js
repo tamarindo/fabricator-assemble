@@ -29,25 +29,45 @@ var defaults = {
 	 * Layout templates
 	 * @type {(String|Array)}
 	 */
-	layouts: ['src/styleGuide/views/layouts/*'],
+	layouts: ['src/style-guide/views/layouts/*'],
 
 	/**
 	 * Layout includes (partials)
 	 * @type {String}
 	 */
-	layoutIncludes: ['src/styleGuide/views/layouts/includes/*'],
+	layoutIncludes: ['src/style-guide/views/layouts/includes/*'],
+
+	/**
+	 *
+	 *
+	 *
+	 *
+	 *
+	 */
+
+	designSysteam:['src/design-system/*.html'],
+	/**
+	 *
+	 *
+	 *
+	 *
+	 *
+	 */
+
+	flowsPages:['src/source/components/pages/**/*.html'],
+
 
 	/**
 	 * Pages to be inserted into a layout
 	 * @type {(String|Array)}
 	 */
-	views: ['src/pages/*/*','src/styleGuide/views/**/*', '!src/styleGuide/views/+(layouts)/**'],
+	views: ['src/style-guide/views/**/*.html', '!src/style-guide/views/+(layouts)/**','src/source/components/pages/**/*.html','src/design-system/*.html'],
 
 	/**
 	 * Materials - snippets turned into partials
 	 * @type {(String|Array)}
 	 */
-	materials: ['src/components/**/*.html'],
+	materials: ['src/source/components/**/*.html','!src/source/components/+(pages)/**'],
 
 	/**
 	 * JSON or YAML data models that are piped into views
@@ -68,6 +88,8 @@ var defaults = {
 	keys: {
 		materials: 'materials',
 		views: 'views',
+		designSysteam: 'designSystem',
+		flowsPages: 'flowsPages',
 		docs: 'docs'
 	},
 
@@ -230,10 +252,16 @@ var buildContext = function (data, hash) {
 	var views = {};
 	views[options.keys.views] = assembly.views;
 
+	var designSysteam = {};
+	designSysteam[options.keys.designSysteam] = assembly.designSysteam;
+
+	var flowsPages = {};
+	flowsPages[options.keys.flowsPages] = assembly.flowsPages;
+
 	var docs = {};
 	docs[options.keys.docs] = assembly.docs;
 
-	return _.assign({}, data, assembly.data, assembly.materialData, materials, views, docs, hash);
+	return _.assign({}, data, assembly.data, assembly.materialData, materials, views, designSysteam,flowsPages, docs, hash);
 
 };
 
@@ -469,41 +497,52 @@ var parseData = function () {
  */
 var parseViews = function () {
 
+	var fsetview = function ( array, references ) {
+		// get files
+		var files = globby.sync(references, { nodir: true });
+
+		files.forEach(function (file) {
+
+			var id = getName(file, true);
+
+			// determine if view is part of a collection (subdir)
+			var dirname = path.normalize(path.dirname(file)).split(path.sep).pop(),
+				collection = (dirname !== options.keys.views) ? dirname : '';
+
+			var fileMatter = getMatter(file),
+				fileData = _.omit(fileMatter.data, 'notes');
+
+			// if this file is part of a collection
+			if (collection) {
+
+				// create collection if it doesn't exist
+				array[collection] = array[collection] || {
+					name: toTitleCase(collection),
+					items: {}
+				};
+
+				// store view data
+				array[collection].items[id] = {
+					name: toTitleCase(id),
+					data: fileData
+				};
+
+			}
+
+		});
+	}
+
 	// reset
 	assembly.views = {};
+	assembly.designSysteam = {};
+	assembly.flowsPages = {};
 
-	// get files
-	var files = globby.sync(options.views, { nodir: true });
 
-	files.forEach(function (file) {
+	fsetview(assembly.views,options.views );
+	fsetview(assembly.designSysteam,options.designSysteam );
+	fsetview(assembly.flowsPages,options.flowsPages );
 
-		var id = getName(file, true);
 
-		// determine if view is part of a collection (subdir)
-		var dirname = path.normalize(path.dirname(file)).split(path.sep).pop(),
-			collection = (dirname !== options.keys.views) ? dirname : '';
-
-		var fileMatter = getMatter(file),
-			fileData = _.omit(fileMatter.data, 'notes');
-
-		// if this file is part of a collection
-		if (collection) {
-
-			// create collection if it doesn't exist
-			assembly.views[collection] = assembly.views[collection] || {
-				name: toTitleCase(collection),
-				items: {}
-			};
-
-			// store view data
-			assembly.views[collection].items[id] = {
-				name: toTitleCase(id),
-				data: fileData
-			};
-
-		}
-
-	});
 
 };
 

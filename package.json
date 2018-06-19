@@ -1,21 +1,44 @@
 {
-  "name": "fabricator-assemble",
-  "version": "1.2.0",
-  "description": "The assembly engine behind Fabricator",
-  "main": "index.js",
-  "engines": {
-    "node": ">=0.10.0",
-    "npm": "^2.0.0"
+  "_from": "git+ssh://git@github.com/tamarindo/fabricator-assemble.git",
+  "_id": "fabricator-assemble@1.2.0",
+  "_inBundle": false,
+  "_location": "/fabricator-assemble",
+  "_phantomChildren": {
+    "array-union": "1.0.2",
+    "arrify": "1.0.1",
+    "brace-expansion": "1.1.8",
+    "fs.realpath": "1.0.0",
+    "inflight": "1.0.6",
+    "inherits": "2.0.3",
+    "object-assign": "4.1.1",
+    "once": "1.4.0",
+    "path-is-absolute": "1.0.1",
+    "pify": "2.3.0",
+    "pinkie-promise": "2.0.1"
   },
-  "scripts": {
-    "test": "mocha"
+  "_requested": {
+    "type": "git",
+    "raw": "fabricator-assemble@git+ssh://git@github.com/tamarindo/fabricator-assemble.git",
+    "name": "fabricator-assemble",
+    "escapedName": "fabricator-assemble",
+    "rawSpec": "git+ssh://git@github.com/tamarindo/fabricator-assemble.git",
+    "saveSpec": "git+ssh://git@github.com/tamarindo/fabricator-assemble.git",
+    "fetchSpec": "ssh://git@github.com/tamarindo/fabricator-assemble.git",
+    "gitCommittish": null
   },
-  "keywords": [
-    "fabricator"
+  "_requiredBy": [
+    "#DEV:/"
   ],
-  "author": "Luke Askew",
-  "license": "MIT",
-  "repository": "fbrctr/fabricator-assemble",
+  "_resolved": "git+ssh://git@github.com/tamarindo/fabricator-assemble.git#6d97f3f12b0dfe6ad4814d502b8af2f434fdbf8d",
+  "_spec": "fabricator-assemble@git+ssh://git@github.com/tamarindo/fabricator-assemble.git",
+  "_where": "/Users/dbernal/Proyectos/ProductoBase/poc-atomic-design/poc-atomic-design",
+  "author": {
+    "name": "Luke Askew"
+  },
+  "bugs": {
+    "url": "https://github.com/fbrctr/fabricator-assemble/issues"
+  },
+  "bundleDependencies": false,
   "dependencies": {
     "chalk": "^1.1.3",
     "globby": "^5.0.0",
@@ -30,10 +53,41 @@
     "mkdirp": "^0.5.1",
     "sort-object": "^3.0.2"
   },
+  "deprecated": false,
+  "description": "The assembly engine behind Fabricator",
   "devDependencies": {
     "del": "^2.2.1",
     "helper-markdown": "^0.1.2",
     "html-minifier": "^2.1.7",
     "mocha": "^2.5.3"
-  }
+  },
+  "engines": {
+    "node": ">=0.10.0",
+    "npm": "^2.0.0"
+  },
+  "homepage": "https://github.com/fbrctr/fabricator-assemble#readme",
+  "keywords": [
+    "fabricator"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "fabricator-assemble",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fbrctr/fabricator-assemble.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "version": "1.2.0",
+  "warnings": [
+    {
+      "code": "ENOTSUP",
+      "required": {
+        "node": ">=0.10.0",
+        "npm": "^2.0.0"
+      },
+      "pkgid": "fabricator-assemble@1.2.0"
+    }
+  ]
 }
